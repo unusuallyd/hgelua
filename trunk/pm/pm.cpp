@@ -6,6 +6,8 @@
 
 int _tmain(int argc, _TCHAR* argv[])
 {
+	TexManager tex_mgr;
+	tex_mgr.Init("tex.lua");
 	return 0;
 }
 
