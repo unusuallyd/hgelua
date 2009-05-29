@@ -7,7 +7,7 @@
 int _tmain(int argc, _TCHAR* argv[])
 {
 	TexManager tex_mgr;
-	tex_mgr.Init("tex.lua");
+	tex_mgr.Init("script/tex.lua");
 	return 0;
 }
 
