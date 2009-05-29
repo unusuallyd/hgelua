@@ -25,8 +25,7 @@ void TexManager::Init(const char *srcipt_path)
 	}
 	if(is_load_once)
 	{	
-		if(! LoadOnce())
-			printf("并非所有纹理成功载入!\n");
+		LoadOnce();
 	}
 }
 
@@ -105,13 +104,31 @@ bool TexManager::TryAddTexture(int tid)
 	return suc;
 }
 
-bool TexManager::LoadOnce()
+void TexManager::LoadOnce()
 {
 	lua_getglobal(L, "Iter");
-	if (lua_pcall(L, 0, 2, 0) )
+	if (lua_pcall(L, 0, 3, 0) )
 	{
 		printf(" 尝试调用脚本函数 Iter 错误!\n");
-		return false;
 	}
-	return false;
+	bool suc = !lua_isnil(L, -3);
+
+	while(suc)
+	{
+		int tid = lua_tointeger(L, -3);
+		const char* path = lua_tostring(L, -2);
+		const char* info = lua_isnil(L, -1) ? "None" : lua_tostring(L, -1);
+		HTEXTURE tex = hge->Texture_Load(path);
+		if(tex==NULL){
+			printf("载入纹理失败 %s , %s\n", path, info);
+		}else{
+			tex_map[tid] = tex;
+			info_map[tid] = info;
+			printf("载入纹理 %s , %s\n", path, info);
+		}
+		lua_pop(L, 3);
+		lua_getglobal(L, "Iter");
+		lua_pcall(L, 0, 3, 0);
+		suc = !lua_isnil(L, -3);
+	}
 }

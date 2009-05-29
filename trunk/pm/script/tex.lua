@@ -1,7 +1,7 @@
 local texs = 
 {
-	[ 1001 ] = { "image\\a.jpg"},
-	[ 1002 ] = { "image\\key.jpg" , "info"},
+	[ 1001 ] = { "../image/a.jpg"},
+	[ 1002 ] = { "../image/key.jpg" , "info"},
 }
 
 local index = nil
@@ -11,25 +11,25 @@ function GetTex(tid)
 	if texs[tid] then
 		return texs[tid][1], texs[tid][2]
 	else
-		return nil, nil
+		return 
 	end
 end
 
 function Iter()
 	local path, info
 	index, res = next(texs, index)
-	if res == nil then return nil, nil end
-	return res[1], res[2]
+	if res == nil then return end
+	return index,res[1], res[2]
 end
 
 
 
 function Test()
 
-	local p,i = Iter()
-	while p do
-		print(p, i)
-		p, i = Iter()
+	local i,p,info = Iter()
+	while i do
+		print(i,p,info)
+		i,p,info = Iter()
 	end
 end
 
