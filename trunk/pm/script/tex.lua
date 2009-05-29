@@ -1,7 +1,7 @@
 local texs = 
 {
-	[ 1001 ] = { "../image/a.jpg"},
-	[ 1002 ] = { "../image/key.jpg" , "info"},
+	[ 1001 ] = { "image/a.jpg"},
+	[ 1002 ] = { "image/key.jpg" , "info"},
 }
 
 local index = nil
