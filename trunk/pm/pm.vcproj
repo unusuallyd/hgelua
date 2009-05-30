@@ -178,6 +178,10 @@
 				>
 			</File>
 			<File
+				RelativePath=".\SoundManager.cpp"
+				>
+			</File>
+			<File
 				RelativePath=".\stdafx.cpp"
 				>
 				<FileConfiguration
@@ -211,6 +215,10 @@
 			Filter="h;hpp;hxx;hm;inl;inc;xsd"
 			UniqueIdentifier="{93995380-89BD-4b04-88EB-625FBE52EBFB}"
 			>
+			<File
+				RelativePath=".\SoundManager.h"
+				>
+			</File>
 			<File
 				RelativePath=".\stdafx.h"
 				>

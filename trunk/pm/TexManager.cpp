@@ -72,11 +72,11 @@ bool TexManager::AssertExist(int tid)
 bool TexManager::TryAddTexture(int tid)
 {
 	StackDump(L);
-	lua_getglobal(L, "GetTex");
+	lua_getglobal(L, "GetData");
 	lua_pushinteger(L, tid);
 	if (lua_pcall(L, 1, 2, 0) )
 	{
-		printf(" 尝试调用脚本函数 GetTex 错误!\n");
+		printf(" 尝试调用脚本函数 GetData 错误!\n");
 		//StackDump(L);
 		lua_pop(L, 1);
 		return false;
