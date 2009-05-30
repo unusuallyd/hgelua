@@ -9,9 +9,14 @@ TexManager::TexManager(void)
 	is_load_once = true;
 }
 
-TexManager::~TexManager(void)
+void TexManager::CleanUp()
 {
 	if(L) lua_close(L);
+	for (ResMap::iterator it = tex_map.begin(); it != tex_map.end(); ++it)
+	{
+		HTEXTURE tex = it->second;
+		hge->Texture_Free(tex);
+	}
 }
 
 void TexManager::Init(const char *srcipt_path)

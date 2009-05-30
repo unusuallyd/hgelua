@@ -4,7 +4,7 @@
 #include "stdafx.h"
 
 extern HGE *hge;
-HMUSIC  effect;
+HEFFECT effect;
 
 bool FrameFunc()
 {
@@ -13,6 +13,7 @@ bool FrameFunc()
 	{
 	case HGEK_ESCAPE: return true;
 	case HGEK_UP:
+		hge->Effect_Play(effect);
 		break;
 	case HGEK_DOWN:
 		break;
@@ -41,9 +42,14 @@ int main()
 		printf("Hge System_Initiate Failed!\n");
 		return 1;		
 	}
-	effect = hge->Music_Load("sound/midi/14.mid");
-	assert(effect!=NULL);
+	TexManager tex_manager;
+	tex_manager.Init("script/tex.lua");
+	SoundManager sound_manager;
+	sound_manager.Init("script/sounds.lua");
 	hge->System_Start();
+
+	tex_manager.CleanUp();
+	sound_manager.CleanUp();
 	hge->System_Shutdown();
 	hge->Release();
 

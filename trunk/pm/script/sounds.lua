@@ -1,5 +1,5 @@
 
-local folder = "sound/midi"
+local folder = "sound/mp3"
 local datas = 
 {
 	[ 1000 ] = { "0.mid", "¹íËş,ÁåÉù"},
@@ -34,6 +34,7 @@ local datas =
 	[ 1099 ] = { "0.mid" , ""},
 	[ 1099 ] = { "0.mid" , ""},
 	[ 1099 ] = { "0.mid" , ""},
+	[ 2054 ] = { "54.mp3" , ""},
 }
 ------------------------------------------------
 for k, v in pairs(datas) do
