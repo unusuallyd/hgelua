@@ -4,7 +4,7 @@
 #include "stdafx.h"
 
 extern HGE *hge;
-HEFFECT effect;
+HMUSIC  effect;
 
 bool FrameFunc()
 {
@@ -34,13 +34,15 @@ int main()
 	hge->System_SetState(HGE_WINDOWED, true);
 	hge->System_SetState(HGE_FRAMEFUNC, FrameFunc);
 	hge->System_SetState(HGE_RENDERFUNC, RenderFunc);
+	hge->System_SetState(HGE_LOGFILE, "game.log");
 
 	if(! hge->System_Initiate())
 	{
 		printf("Hge System_Initiate Failed!\n");
 		return 1;		
 	}
-	effect = hge->Effect_Load("sound/midi/14.mid");
+	effect = hge->Music_Load("sound/midi/14.mid");
+	assert(effect!=NULL);
 	hge->System_Start();
 	hge->System_Shutdown();
 	hge->Release();
