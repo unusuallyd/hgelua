@@ -17,6 +17,7 @@ typedef std::map<int, const char* > StrMap;
 #include "util.h"
 #include "TexManager.h"
 #include "SoundManager.h"
+#include "HpBar.h"
 
 
 

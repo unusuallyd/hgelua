@@ -77,6 +77,10 @@ bool RenderFunc()
 	pNotAntialias->Print(10,200,"中文显示方案 演示“非平滑模式”");
 	pAntialias->Print(10,250,"中文显示方案 演示“平滑反锯齿模式”");
 
+
+	HpBar bar(100,20,2);
+	bar.Render();
+
 	hge->Gfx_EndScene();
 	return false;
 }
