@@ -1,4 +1,5 @@
-#include "GfxFont.h"
+
+#include "stdafx.h"
 #include <atlbase.h>
 #include <stdio.h>
 

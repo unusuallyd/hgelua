@@ -20,5 +20,9 @@ typedef std::map<int, const char* > StrMap;
 
 
 
+#include "cn\\GfxFont.h"
+
+
+
 
 
