@@ -78,8 +78,10 @@ bool RenderFunc()
 	pAntialias->Print(10,250,"中文显示方案 演示“平滑反锯齿模式”");
 
 
-	HpBar bar(100,20,2);
-	bar.Render();
+	HpBar bar(200,30,2);
+	bar.SetPos(400,400);
+	bar.SetPercent(0.5);
+	bar.Render(hge);
 
 	hge->Gfx_EndScene();
 	return false;
@@ -92,6 +94,7 @@ int main()
 	hge->System_SetState(HGE_RENDERFUNC, RenderFunc);
 	hge->System_SetState(HGE_LOGFILE, "game.log");
 	hge->System_SetState(HGE_SCREENBPP, 32);
+	hge->System_SetState(HGE_ZBUFFER, false);
 
 	if(! hge->System_Initiate())
 	{
@@ -101,10 +104,7 @@ int main()
 	Init();
 	TexManager tex_manager;
 	tex_manager.Init("script/tex.lua");
-	SoundManager sound_manager;
-	sound_manager.Init("script/sounds.lua");
-	tmp = hge->Effect_PlayEx(sound_manager.GetSound(2054),100,100,2,true);
-	hge->Channel_Pause(tmp);
+
 	quad.tex = tex_manager.GetTexture(1003);
 
 
@@ -119,18 +119,12 @@ int main()
 		quad.v[i].col=0xFFFFA000;
 	}
 
-	// Set up quad's texture coordinates.
-	// 0,0 means top left corner and 1,1 -
-	// bottom right corner of the texture.
-	quad.v[0].tx=96.0/128.0; quad.v[0].ty=64.0/128.0; 
-	quad.v[1].tx=128.0/128.0; quad.v[1].ty=64.0/128.0; 
-	quad.v[2].tx=128.0/128.0; quad.v[2].ty=96.0/128.0; 
-	quad.v[3].tx=96.0/128.0; quad.v[3].ty=96.0/128.0; 
+
 	//////////////////////////////////////////////////////////////////////////
 	hge->System_Start();
 
 	tex_manager.CleanUp();
-	sound_manager.CleanUp();
+
 	hge->System_Shutdown();
 	hge->Release();
 
