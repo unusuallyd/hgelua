@@ -1,22 +1,23 @@
 #pragma once
 
-
+#include <hge.h>
 
 class TexManager
 {
 	ResMap tex_map;
 	StrMap info_map;
-	bool is_load_once; //一次性载入纹理
-	bool AssertExist(int tid); //判定纹理是否在map中, 如果不存在并且 is_load_once 为 flase, 尝试载入
-	bool TryAddTexture(int tid); //尝试载入编号为tid的纹理
-	void LoadOnce(); //尝试一次性载入
-	// 状态
-	lua_State *L;
+	IntMap height_map, width_map, top_map, left_map;
+	bool IsExist(int tid); 
+	void AssertExist(int tid);
+	void LoadOnce(lua_State* L);
 public:
-	TexManager(void);
 	void Init(const char* srcipt_path);
 	void CleanUp();
-	void SetLoadMode(bool load_once); //设置载入方式
 	HTEXTURE GetTexture(int tid);
 	const char* GetInfo(int tid);
+	int GetHeight(int tid);
+	int GetWidth(int tid);
+	int GetTop(int tid);
+	int GetLeft(int tid);
+	hgeSprite* CreateSprite(int tid);
 };

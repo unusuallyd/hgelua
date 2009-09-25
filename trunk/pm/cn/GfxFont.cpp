@@ -87,7 +87,7 @@ void GfxFont::Print( float x, float y, const char *format, ... )
 {
 	char sBuffer[10240] = {0};
 	char *lpsArg=(char*)&format+sizeof(format);
-	vsprintf(sBuffer, format, lpsArg);
+	vsprintf_s(sBuffer, format, lpsArg);
 
 	Render(x,y,CA2W(sBuffer));
 }

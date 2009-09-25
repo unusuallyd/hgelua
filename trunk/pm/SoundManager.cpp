@@ -30,7 +30,7 @@ void SoundManager::Init(const char *srcipt_path)
 
 HEFFECT SoundManager::GetSound(int sid)
 {
-	if(AssertExist(sid))
+	if(IsExist(sid))
 		return sound_map[sid];
 	else
 		return NULL;
@@ -38,13 +38,13 @@ HEFFECT SoundManager::GetSound(int sid)
 
 const char* SoundManager::GetInfo(int sid)
 {
-	if(AssertExist(sid))
+	if(IsExist(sid))
 		return info_map[sid];
 	else
 		return NULL;
 }
 
-bool SoundManager::AssertExist(int sid)
+bool SoundManager::IsExist(int sid)
 {
 	bool res = ( sound_map.find(sid) != sound_map.end() );
 	if(res)

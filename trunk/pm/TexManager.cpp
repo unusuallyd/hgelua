@@ -3,15 +3,9 @@
 
 extern HGE *hge;
 
-TexManager::TexManager(void)
-{
-	L = NULL;
-	is_load_once = true;
-}
 
 void TexManager::CleanUp()
 {
-	if(L) lua_close(L);
 	for (ResMap::iterator it = tex_map.begin(); it != tex_map.end(); ++it)
 	{
 		HTEXTURE tex = it->second;
@@ -21,119 +15,108 @@ void TexManager::CleanUp()
 
 void TexManager::Init(const char *srcipt_path)
 {
-	L = lua_open();
+	lua_State *L = lua_open();
 	luaL_openlibs(L);
 
 	if (luaL_dofile(L, srcipt_path))
 	{
 		printf("纹理脚本载入错误!!\n");
 	}
-	if(is_load_once)
-	{	
-		LoadOnce();
-	}
+	LoadOnce(L);
 }
 
-void TexManager::SetLoadMode(bool load_once)
-{
-	is_load_once = load_once;
-}
 
 HTEXTURE TexManager::GetTexture(int tid)
 {
-	if(AssertExist(tid))
-		return tex_map[tid];
-	else
-		return NULL;
+	return tex_map[tid];
 }
 
 const char* TexManager::GetInfo(int tid)
 {
-	if(AssertExist(tid))
-		return info_map[tid];
-	else
-		return NULL;
+	return info_map[tid];
 }
 
-bool TexManager::AssertExist(int tid)
+int TexManager::GetWidth(int tid)
 {
-	bool res = ( tex_map.find(tid) != tex_map.end() );
-	if(res)
-	{
-		return true;
-	}else
-	{
-		if (is_load_once)
-		{
-			printf("编号为[ %d ]的纹理不存在!\n", tid);
-			return false;
-		}else
-		{
-			return TryAddTexture(tid);
-		}
-	}
+	return width_map[tid];
 }
 
-bool TexManager::TryAddTexture(int tid)
+int TexManager::GetHeight(int tid)
 {
-	StackDump(L);
-	lua_getglobal(L, "GetData");
-	lua_pushinteger(L, tid);
-	if (lua_pcall(L, 1, 2, 0) )
-	{
-		printf(" 尝试调用脚本函数 GetData 错误!\n");
-		//StackDump(L);
+	return height_map[tid];
+}
+
+int TexManager::GetTop(int tid)
+{
+	return top_map[tid];
+}
+
+int TexManager::GetLeft(int tid)
+{
+	return left_map[tid];
+}
+
+bool TexManager::IsExist(int tid)
+{
+	return ( tex_map.find(tid) != tex_map.end() );
+}
+
+void TexManager::AssertExist(int tid)
+{
+	assert(IsExist(tid));
+}
+
+
+void TexManager::LoadOnce(lua_State* L)
+{
+	lua_getglobal(L, "datas");
+	luaL_checktype(L,1,LUA_TTABLE);
+
+	lua_pushnil(L); 
+	while (lua_next(L, 1) != 0) {
+		int tid = lua_tointeger(L, -2);
+		// path
+		lua_pushinteger(L, 1);
+		lua_gettable(L,-2);
+		const char* path = lua_tostring(L,-1);
+		tex_map[tid] = hge->Texture_Load(path);
 		lua_pop(L, 1);
-		return false;
+		// info
+		lua_pushinteger(L, 2);
+		lua_gettable(L, -2);
+		info_map[tid] = lua_tostring(L, -1);
+		lua_pop(L, 1);
+		// width
+		lua_pushinteger(L, 3);
+		lua_gettable(L, -2);
+		width_map[tid] = luaL_optint(L, -1, 32);
+		lua_pop(L, 1);
+		// height
+		lua_pushinteger(L, 4);
+		lua_gettable(L, -2);
+		height_map[tid] = luaL_optint(L, -1, 32);
+		lua_pop(L, 1);
+		// left
+		lua_pushinteger(L, 5);
+		lua_gettable(L, -2);
+		left_map[tid] = luaL_optint(L, -1, 0);
+		lua_pop(L, 1);
+		// top
+		lua_pushinteger(L, 6);
+		lua_gettable(L, -2);
+		top_map[tid] = luaL_optint(L, -1, 0);
+		lua_pop(L, 1);
+		//
+		lua_pop(L, 1);
 	}
-	bool suc = !lua_isnil(L, -2);
-	if(suc)
-	{
-		const char* path = lua_tostring(L, -2);
-		const char* info = lua_isnil(L, -1) ? "None" : lua_tostring(L, -1);
-		HTEXTURE tex = hge->Texture_Load(path);
-		if(tex==NULL){
-			suc = false;
-		}else{
-			tex_map[tid] = tex;
-			info_map[tid] = info;
-			printf("载入纹理 %s , %s\n", path, info);
-		}
-	}
-	if(!suc)
-	{
-		printf("动态载入失败, 编号为[ %d ]的纹理不存在!\n", tid);
-	}
-	//StackDump(L);
-	lua_pop(L, 2);	
-	return suc;
+
 }
 
-void TexManager::LoadOnce()
+hgeSprite* TexManager::CreateSprite(int tid)
 {
-	lua_getglobal(L, "Iter");
-	if (lua_pcall(L, 0, 3, 0) )
+	if (IsExist(tid))
 	{
-		printf(" 尝试调用脚本函数 Iter 错误!\n");
-	}
-	bool suc = !lua_isnil(L, -3);
-
-	while(suc)
-	{
-		int tid = lua_tointeger(L, -3);
-		const char* path = lua_tostring(L, -2);
-		const char* info = lua_isnil(L, -1) ? "None" : lua_tostring(L, -1);
-		HTEXTURE tex = hge->Texture_Load(path);
-		if(tex==NULL){
-			printf("载入纹理失败 %s , %s\n", path, info);
-		}else{
-			tex_map[tid] = tex;
-			info_map[tid] = info;
-			printf("载入纹理 %s , %s\n", path, info);
-		}
-		lua_pop(L, 3);
-		lua_getglobal(L, "Iter");
-		lua_pcall(L, 0, 3, 0);
-		suc = !lua_isnil(L, -3);
-	}
+		return new hgeSprite(GetTexture(tid), GetLeft(tid), GetTop(tid), GetWidth(tid), GetHeight(tid));
+	}else	 
+		return NULL;
 }
