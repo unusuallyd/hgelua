@@ -1,38 +1,14 @@
+-- the only thing need to output is datas 
 local folder = "image"
-local datas = 
+datas = 
 {
-	[ 1001 ] = { "a.jpg"},
-	[ 1002 ] = { "key.jpg" , "info"},
-	[ 1003 ] = { "w.png"},
+	[ 1001 ] = { "a.jpg", "a",400, 300,0,0},
+	[ 1002 ] = { "a.jpg" , "info", 400,300},
 }
 
-------------------------------------------------
-for k, v in pairs(datas) do
-	datas[k][1] = folder.."/"..v[1]
-end
-local index = nil
+table.foreach(datas, function (k,v) v[1] = folder.."/"..v[1] end)
 
-function GetData(tid)
-	if datas[tid] then
-		return datas[tid][1], datas[tid][2]
-	else
-		return 
-	end
-end
+--table.foreach(datas, function (k,v) print(v[1]) end)
 
-function Iter()
-	local path, info
-	index, res = next(datas, index)
-	if res == nil then return end
-	return index,res[1], res[2]
-end
 
-function Test()
-
-	local i,p,info = Iter()
-	while i do
-		print(i,p,info)
-		i,p,info = Iter()
-	end
-end
 
