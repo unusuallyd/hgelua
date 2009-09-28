@@ -30,3 +30,8 @@ void StackDump (lua_State *L)
 	}
 	printf("\n");		/* end the listing */
 }
+
+int RandomInt(int a, int b)
+{
+	return rand()%(a-b+1) + a;
+}

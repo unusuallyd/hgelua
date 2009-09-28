@@ -10,9 +10,11 @@
 #include <lua.hpp>
 #include <map>
 #include <windows.h>
+#include "Predator.h"
 
 #define NULL_INT -1
-
+#define SCREEN_WIDTH 800
+#define SCREEN_HEIGHT 600
 
 // typedef
 typedef std::map<int, DWORD> ResMap;

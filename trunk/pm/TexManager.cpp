@@ -116,7 +116,9 @@ hgeSprite* TexManager::CreateSprite(int tid)
 {
 	if (IsExist(tid))
 	{
-		return new hgeSprite(GetTexture(tid), GetLeft(tid), GetTop(tid), GetWidth(tid), GetHeight(tid));
+		hgeSprite *spr = new hgeSprite(GetTexture(tid), GetLeft(tid), GetTop(tid), GetWidth(tid), GetHeight(tid));
+		spr->SetHotSpot(GetWidth(tid)/2, GetHeight(tid)/2);
+		return spr;
 	}else	 
 		return NULL;
 }

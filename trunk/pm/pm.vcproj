@@ -261,6 +261,14 @@
 		<Filter
 			Name="ai"
 			>
+			<File
+				RelativePath=".\predator.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\predator.h"
+				>
+			</File>
 		</Filter>
 	</Files>
 	<Globals>
