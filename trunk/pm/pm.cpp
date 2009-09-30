@@ -26,9 +26,9 @@ void InitFunc()
 	prey.randpos(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT);
 
 	prey.set_target(predator);
-	prey.set_speed(1);
+	prey.set_speed(3);
 	predator.set_target(prey);
-	predator.set_speed(3);
+	predator.set_speed(6);
 }
 
 bool FrameFunc()
@@ -95,6 +95,7 @@ int main()
 	hge->System_SetState(HGE_LOGFILE, "game.log");
 	hge->System_SetState(HGE_SCREENBPP, 32);
 	hge->System_SetState(HGE_ZBUFFER, false);
+	hge->System_SetState(HGE_FPS, FPS);
 
 	if(! hge->System_Initiate())
 	{

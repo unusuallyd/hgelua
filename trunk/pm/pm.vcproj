@@ -180,6 +180,14 @@
 			Name="util"
 			>
 			<File
+				RelativePath=".\2Dfloat.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\2Dfloat.h"
+				>
+			</File>
+			<File
 				RelativePath=".\stdafx.cpp"
 				>
 				<FileConfiguration
