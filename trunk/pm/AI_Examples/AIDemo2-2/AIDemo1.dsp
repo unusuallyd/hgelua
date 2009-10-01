@@ -125,13 +125,5 @@ SOURCE=.\winmain.h
 
 # PROP Default_Filter "ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe"
 # End Group
-# Begin Source File
-
-SOURCE=..\..\VC98\Lib\USER32.LIB
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\VC98\Lib\COMCTL32.LIB
-# End Source File
 # End Target
 # End Project

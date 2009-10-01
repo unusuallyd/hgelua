@@ -21,6 +21,7 @@ inline	float	RadiansToDegrees(float rad);
 
 inline	float	DegreesToRadians(float deg)
 {
+
 	return deg * pi / 180.0f;
 }
 
