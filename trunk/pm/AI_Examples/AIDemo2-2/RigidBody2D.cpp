@@ -6,7 +6,7 @@ RigidBody2D::RigidBody2D(void)
 	
 }
 
-void	RigidBody2D::CalcLoads(void)
+void	RigidBody2D::CalcLoads(void) // 求推力，扭力矩
 {
 	Vector	Fb;				// stores the sum of forces
 	Vector	Mb;				// stores the sum of moments
@@ -30,6 +30,7 @@ void	RigidBody2D::CalcLoads(void)
 	Mb.z = 0.0f;
 
 	// Define the thrust vector, which acts through the craft's CG
+	// 计算推力向量,自我坐标系
 	Thrust.x = 0.0f;
 	Thrust.y = 1.0f;
 	Thrust.z = 0.0f;  // zero in 2D
@@ -139,7 +140,7 @@ void	RigidBody2D::UpdateBodyEuler(double dt)
 		CalcLoads();
 		
 		// Integrate linear equation of motion:
-		a = vForces / fMass;
+		a = vForces / fMass; // a = F / m
 		
 		dv = a * dt;
 		vVelocity += dv;
@@ -148,7 +149,8 @@ void	RigidBody2D::UpdateBodyEuler(double dt)
 		vPosition += ds;
 
 		// Integrate angular equation of motion:
-		aa = vMoment.z / fInertia;
+		// 角加速度 = 力矩 / 转动惯量
+		aa = vMoment.z / fInertia; // Aa = M / I  
 
 		dav = aa * dt;
 		
@@ -197,4 +199,39 @@ void	RigidBody2D::ModulateThrust(bool up)
 }
 
 
+void	RigidBody2D::CrossBound(float w, float h)
+{
+	if(vPosition.x > w) vPosition.x = 0;
+	else if(vPosition.x < 0) vPosition.x = w;
+	if(vPosition.y > h) vPosition.y = 0;
+	else if(vPosition.y < 0) vPosition.y = h;
+}
 
+void	RigidBody2D::SetProjected(float w, float l)
+{
+	fWidth = w;
+	fLength = l;
+	ProjectedArea = (fLength + fWidth) * _DRAWHEIGHT;
+
+	CD.y = -0.12*fLength;		CD.x = 0.0f;			// coordinates of the body center of drag
+	CT.y = -0.50*fLength;		CT.x = 0.0f;			// coordinates of the propeller thrust vector
+	CPT.y = 0.5*fLength;		CPT.x = -0.5*fWidth;	// coordinates of the port bow thruster
+	CST.y = 0.5*fLength;		CST.x = 0.5*fWidth;	// coordinates of the starboard bow thruster
+}
+
+void	RigidBody2D::SetMass(float mass, float inertia/* =_DEFAULT */)
+{
+	if (inertia == _DEFAULT)
+	{
+		inertia = mass;
+	}
+	fMass = mass;
+	fInertia = inertia;
+}
+
+void	RigidBody2D::SetPosistion(float x, float y, float ori)
+{
+	vPosition.x = x;
+	vPosition.y = y;
+	fOrientation = ori;
+}

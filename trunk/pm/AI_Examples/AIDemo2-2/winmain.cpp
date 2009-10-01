@@ -211,12 +211,12 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 	switch (message) {
 
 		case WM_CREATE:
-			ShowTrails = true;
+			ShowTrails = false;
 			ShowVectors = false;
-			BasicChase = false;
+			BasicChase = true;
 			BasicEvade = false;
 			InterceptChase = false;
-			PotentialChase = true;
+			PotentialChase = false;
 			break;
 
 		case WM_ACTIVATE:
@@ -292,6 +292,16 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 						BasicChase = false;
 						CheckMenuItem(GetMenu(hMainWindow), ID_OPTIONS_BASICCHASE, MF_UNCHECKED);
 					}
+					if(PotentialChase)
+					{
+						PotentialChase = false;
+						CheckMenuItem(GetMenu(hMainWindow), ID_OPTIONS_POTENTIALCHASE, MF_UNCHECKED);
+					}
+					if(InterceptChase)
+					{
+						InterceptChase = false;
+						CheckMenuItem(GetMenu(hMainWindow), ID_OPTIONS_INTERCEPT, MF_UNCHECKED);
+					}
 					break;
 
 				case ID_OPTIONS_INTERCEPT:
@@ -319,12 +329,12 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 					state = PotentialChase ? MF_CHECKED:MF_UNCHECKED;
 					CheckMenuItem(GetMenu(hMainWindow), ID_OPTIONS_POTENTIALCHASE, state);
 
+					
 					if(BasicEvade)
 					{
 						BasicEvade = false;
 						CheckMenuItem(GetMenu(hMainWindow), ID_OPTIONS_BASICEVADE, MF_UNCHECKED);
 					}
-
 					break;
 
 			}

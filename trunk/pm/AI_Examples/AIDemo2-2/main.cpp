@@ -19,54 +19,20 @@ Vector			Target;
 #define		_TOL			1e-10
 #define		_FWDTIME		10
 #define		_THRUSTFACTOR	3
-#define     _CHASESETUP		true
+
 
 bool	Initialize(void)
 {
 	
-	Craft1.fMass = 10;
-	Craft1.fInertia = 10;
-	Craft1.fInertiaInverse = 1/10;
-	Craft1.vPosition.x = _WINWIDTH-60;
-	Craft1.vPosition.y = _WINHEIGHT*0.8;
-	Craft1.fWidth = 10;
-	Craft1.fLength = 20;
-	Craft1.fHeight = 5;
-	Craft1.fOrientation = 135;	
-	Craft1.CD.y = -0.12*Craft1.fLength;		Craft1.CD.x = 0.0f;			// coordinates of the body center of drag
-	Craft1.CT.y = -0.50*Craft1.fLength;		Craft1.CT.x = 0.0f;			// coordinates of the propeller thrust vector
-	Craft1.CPT.y = 0.5*Craft1.fLength;		Craft1.CPT.x = -0.5*Craft1.fWidth;	// coordinates of the port bow thruster
-	Craft1.CST.y = 0.5*Craft1.fLength;		Craft1.CST.x = 0.5*Craft1.fWidth;	// coordinates of the starboard bow thruster
-
-	Craft1.ProjectedArea = (Craft1.fLength + Craft1.fWidth) * Craft1.fHeight;
+	Craft1.SetMass(10);
+	Craft1.SetPosistion(GetRandomNumber(0,_WINWIDTH), GetRandomNumber(0,_WINHEIGHT), GetRandomNumber(0,360));
+	Craft1.SetProjected(10, 20);
 	Craft1.ThrustForce = _THRUSTFORCE*1;
 
 
-	Craft2.fMass = 10;
-	Craft2.fInertia = 10;
-	Craft2.fInertiaInverse = 1/10;
-	if(_CHASESETUP)
-	{
-		Craft2.vPosition.x = 40;
-		Craft2.vPosition.y = _WINHEIGHT*0.8;
-	} else {
-		Craft2.vPosition.x = Craft1.vPosition.x - Craft1.fLength*8;
-		Craft2.vPosition.y = Craft1.vPosition.y - Craft1.fLength*4;
-	}
-
-	Craft2.fWidth = 10;
-	Craft2.fLength = 20;
-	Craft2.fHeight = 5;
-	if(_CHASESETUP)
-		Craft2.fOrientation = -135;
-	else
-		Craft2.fOrientation = 135;
-	Craft2.CD.y = -0.12*Craft2.fLength;		Craft2.CD.x = 0.0f;			// coordinates of the body center of drag
-	Craft2.CT.y = -0.50*Craft2.fLength;		Craft2.CT.x = 0.0f;			// coordinates of the propeller thrust vector
-	Craft2.CPT.y = 0.5*Craft2.fLength;		Craft2.CPT.x = 0.5*Craft2.fWidth;	// coordinates of the port bow thruster
-	Craft2.CST.y = 0.5*Craft2.fLength;		Craft2.CST.x = -0.5*Craft2.fWidth;	// coordinates of the starboard bow thruster
-
-	Craft2.ProjectedArea = (Craft2.fLength + Craft2.fWidth) * Craft2.fHeight;
+	Craft2.SetMass(10);
+	Craft2.SetPosistion(GetRandomNumber(0,_WINWIDTH), GetRandomNumber(0,_WINHEIGHT), GetRandomNumber(0,360));
+	Craft2.SetProjected(10, 20);
 	Craft2.ThrustForce = _THRUSTFORCE*_THRUSTFACTOR;
 	
 	return true;
@@ -107,14 +73,10 @@ void	UpdateSimulation(void)
 	if(BasicEvade)
 		DoCraft2Evade();
 	if(InterceptChase)
-	{
-		
+	{		
 		//DoCraft2Intercept();
 		//DoCraft2ModulateThrust();
-
 		DoCraft2InterceptAlt();
-		
-		
 	}
 	if(PotentialChase)
 		DoAttractCraft2();
@@ -147,16 +109,8 @@ void	UpdateSimulation(void)
 	} else
 		FrameCounter++;
 
-	if(Craft1.vPosition.x > _WINWIDTH) Craft1.vPosition.x = 0;
-	if(Craft1.vPosition.x < 0) Craft1.vPosition.x = _WINWIDTH;
-	if(Craft1.vPosition.y > _WINHEIGHT) Craft1.vPosition.y = 0;
-	if(Craft1.vPosition.y < 0) Craft1.vPosition.y = _WINHEIGHT;
-
-	if(Craft2.vPosition.x > _WINWIDTH) Craft2.vPosition.x = 0;
-	if(Craft2.vPosition.x < 0) Craft2.vPosition.x = _WINWIDTH;
-	if(Craft2.vPosition.y > _WINHEIGHT) Craft2.vPosition.y = 0;
-	if(Craft2.vPosition.y < 0) Craft2.vPosition.y = _WINHEIGHT;
-
+	Craft1.CrossBound(_WINWIDTH, _WINHEIGHT);
+	Craft2.CrossBound(_WINWIDTH, _WINHEIGHT);
 
 }
 
