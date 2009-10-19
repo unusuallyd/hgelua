@@ -10,8 +10,7 @@ extern HGE *hge;
 TexManager tex_manager;
 GfxFont* pGfxFont;	
 hgeSprite *sprP, *sprA;
-Predator predator;
-Prey prey;
+
 
 void InitFunc()
 {
@@ -19,16 +18,10 @@ void InitFunc()
 	pGfxFont		= new GfxFont("宋体",12,FALSE,FALSE,FALSE);// 宋书，非粗体，非斜体，非平滑
 
 	pGfxFont->SetColor(0xFF00FFFF);		// 设置像素字体颜色
-	sprP = tex_manager.CreateSprite(1001);
-	sprA = tex_manager.CreateSprite(1002);
-	
-	predator.randpos(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT);
-	prey.randpos(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT);
+	sprA = tex_manager.CreateSprite(1001);
 
-	prey.set_target(predator);
-	prey.set_speed(3);
-	predator.set_target(prey);
-	predator.set_speed(6);
+	
+
 }
 
 bool FrameFunc()
@@ -40,8 +33,7 @@ bool FrameFunc()
 		return true;
 		break;
 	case HGEK_ENTER:
-		predator.randpos(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT);
-		prey.randpos(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT);
+
 		break;
 	case HGEK_RIGHT:
 		break;
@@ -49,8 +41,7 @@ bool FrameFunc()
 		break;
 	}
 
-	prey.move();
-	predator.move();
+
 
 	return false;
 }
@@ -66,8 +57,7 @@ bool RenderFunc()
 
 	pGfxFont->Print(10,10,lpString);
 
-	sprA->Render(prey.get_x(), prey.get_y());
-	sprP->Render(predator.get_x(), predator.get_y());
+	sprA->Render(0,0);
 
 
 

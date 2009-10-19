@@ -2,8 +2,7 @@
 local folder = "image"
 datas = 
 {
-	[ 1001 ] = { "whitestar.BMP", "w",64, 64,0,0},
-	[ 1002 ] = { "bluecircle.BMP" , "b", 64,64},
+	[ 1001 ] = { "big.jpg", "w",2848, 2136,0,0},
 }
 
 table.foreach(datas, function (k,v) v[1] = folder.."/"..v[1] end)

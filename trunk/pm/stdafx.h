@@ -27,7 +27,6 @@ typedef std::map<int, int> IntMap;
 #include "SoundManager.h"
 #include "HpBar.h"
 #include "Predator.h"
-#include "2Dfloat.h"
 #include "cn\\GfxFont.h"
 
 

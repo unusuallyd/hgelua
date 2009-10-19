@@ -29,9 +29,7 @@ void _p::fixed_xy()
 }
 void _p::move()
 {
-	if (on_edge())
-	{
-	}
+
 }
 
 void _p::moveto(float tx, float ty)
@@ -42,17 +40,16 @@ void _p::moveto(float tx, float ty)
 	m_angle = atan(dy/dx);
 }
 
-bool _p::on_edge(float x, float y)
+bool _p::on_edge()
 {
-	if ( x - EP < m_x1 || x + EP > m_x2) return true;
-	if ( y - EP < m_y1 || y + EP > m_y2) return true;
 	return false;
 }
 
 bool _p::on_point(float x, float y)
 {
-	if ( abs(m_x - x) < EP || abs(m_y - y) < EP ) return true;
-	else return false;
+	//if ( abs(m_x - x) < EP || abs(m_y - y) < EP ) return true;
+	//else return false;
+	return false;
 }
 //////////////////////////////////////////////////////////////////////////
 // Predator
