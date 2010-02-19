@@ -26,42 +26,49 @@ GameCtrl = {
 	__dat = {} 
 }
 
-function GameCtrl:FrameFunc()
-	if self.GetData.IsEnd then
-		return true
-	end
-	local CurSection = self.CurSection
-	return CurSection.FrameFunc()
-end
-
-function GameCtrl:RenderFunc()
-	local CurSection = self.CurSection
-	CurSection.RenderFunc()
-end
-
-function GameCtrl:Init()
-	hge.System_SetState(HGE_FRAMEFUNC, self.FrameFunc);
-	hge.System_SetState(HGE_RENDERFUNC, self.RenderFunc);
-	hge.System_Init()
-end
-
 function GameCtrl:GetData()
 	return self.__dat
 end
 
-function GameCtrl:AddSection(Id, Section)
-	self.__dat[Id] = Section
+function GameCtrl:FrameFunc()
+	local func
+	func = function ()
+		if self.__dat.IsEnd then
+			return true
+		end
+		local CurSection = self.CurSection
+		if not CurSection then return false end
+		return CurSection:FrameFunc()
+	end
+	return func
 end
 
-function GameCtrl:Start(Id)
-	self:InitSection(Id)
-	self:GotoSection(Id)
-	
-	hge.System_MainLoop()
+function GameCtrl:RenderFunc()
+	local fun
+	func = function ()
+		local CurSection = self.CurSection
+		if not CurSection then return false end
+		CurSection:RenderFunc()
+	end
+	return func
+end
+
+function GameCtrl:Init()
+	hge.System_SetState(HGE_FRAMEFUNC, self:FrameFunc());
+	hge.System_SetState(HGE_RENDERFUNC, self:RenderFunc());
+	hge.System_Init()
 end
 
 function GameCtrl:End()
-	self.GetData().IsEnd = true
+	self:GetData().IsEnd = true
+end
+
+function GameCtrl:EndSection(Id)
+	self.CurSection:EndFunc()
+end
+
+function GameCtrl:AddSection(Id, Section)
+	self.__dat[Id] = Section
 end
 
 function GameCtrl:InitSection(Id)
@@ -69,21 +76,21 @@ function GameCtrl:InitSection(Id)
 	if not Id then
 		CurSection = self.CurSection
 	else
-		CurSection = 
+		CurSection = self.__dat[Id] 
 	end
-	CurSection.InitFunc()
-end
-
-function GameCtrl:EndSection(Id)
-	...
-	CurSection.EndFunc()
+	CurSection:InitFunc()
 end
 
 function GameCtrl:GotoSection(Id)
 	local Section = self.__dat[Id]
 	if not Section then error("not such game section") end
-	self.GetData().CurSection = Section
-	self.GetData().CurId = Id 
+	self.CurSection = Section
+	self.CurId = Id 
 end
 
+function GameCtrl:Start(Id)
+	self:InitSection(Id)
+	self:GotoSection(Id)
+	hge.System_MainLoop()
+end
 
