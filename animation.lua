@@ -101,7 +101,14 @@ function AnimationGroupRender()
 end
 
 function AnimationList(anim, fps, list)
-	if not list then return end
+	local cb
+	local i = 1
+	cb = function (anim, key)
+		if i > #list then return end
+		anim:Play(list[i], 0, fps, cb)
+		i = i + 1
+	end
+	return cb
 end
 
 
