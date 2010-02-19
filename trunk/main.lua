@@ -69,7 +69,10 @@ anim:Add(2, "Tex/ctrl_2.png", 5, 4, 1, 18)
 anim:Add(3, "Tex/ctrl_3.png", 5, 4, 1, 17)
 anim:Add(4, "Tex/ctrl_4.png", 5, 4, 1, 16)
 list = {1, 2, 3, 4}
-anim:Play(1, 0, 24, AnimationList(anim, 24, list))
+
+cb = AnimationList(anim, 24, list)
+
+anim:Play(1, 0, 24, cb)
 
 AddToAnimationGroup(anim, true)
 
