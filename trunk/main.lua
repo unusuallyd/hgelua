@@ -48,6 +48,7 @@ end
 local function RenderFunc()
 	hge.Gfx_Clear()
 	AnimationGroupRender()
+	font:Render(400, 300, HGETEXT_CENTER, "Hello HGE LUA")
 	return false
 end
 
@@ -73,6 +74,9 @@ list = {1, 2, 3, 4}
 cb = AnimationList(anim, 24, list)
 
 anim:Play(1, 0, 24, cb)
+
+font = hge.NewFont("Tex/font1.fnt")
+font:SetColor(RGB(255,0,0))
 
 AddToAnimationGroup(anim, true)
 

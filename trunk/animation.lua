@@ -37,7 +37,6 @@ function Animation:Update(deltatime)
 	deltatime = deltatime or hge.Timer_GetDelta()
 	local animdat = self.__dat[self.current_key]
 	animdat.spr:Update(deltatime)
-	print(string.format("animation %d, frame %d", self.current_key, animdat.spr:GetFrame()))
 	if not animdat.spr:IsPlaying() then
 		if animdat.callback then
 			animdat.callback(self, self.current_key)
@@ -53,7 +52,6 @@ function Animation:Play(key, mode, fps, callback)
 	if not animdat then 
 		error(string.format("Animation(%s) not exist", key))
 	end
-	print(string.format("Animation %d is playing", key))
 	animdat.spr:SetMode(mode)
 	animdat.spr:SetSpeed(fps)
 	animdat.spr:Play()
