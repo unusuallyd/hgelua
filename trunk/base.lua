@@ -20,3 +20,60 @@ White = RGB(255, 255, 255)
 Black = RGB(0 , 0, 0)
 ABlack = ARGB(0, 0 , 0, 0)
 
+
+
+GameCtrl = {
+	__dat = {} 
+}
+
+function GameCtrl:FrameFunc()
+	local CurSection = self.CurSection
+	return CurSection.FrameFunc()
+end
+
+function GameCtrl:RenderFunc()
+	local CurSection = self.CurSection
+	return CurSection.RenderFunc()
+end
+
+function GameCtrl:Init()
+	hge.System_SetState(HGE_FRAMEFUNC, self.FrameFunc);
+	hge.System_SetState(HGE_RENDERFUNC, self.RenderFunc);
+	hge.System_Init()
+end
+
+function GameCtrl:GetData()
+	return self.__dat
+end
+
+function GameCtrl:AddSection(Id, Section)
+	self.__dat[Id] = Section
+end
+
+function GameCtrl:Start(Id)
+	self:GotoSection(Id)
+	
+	hge.System_MainLoop()
+end
+
+function GameCtrl:End()
+	self.GetData().IsEnd = true
+end
+
+function GameCtrl:InitSection()
+	local CurSection = self.CurSection
+	CurSection.InitFunc()
+end
+
+function GameCtrl:EndSection()
+	CurSection.EndFunc()
+end
+
+function GameCtrl:GotoSection(Id)
+	local Section = self.__dat[Id]
+	if not Section then error("not such game section") end
+	self.GetData().CurSection = Section
+	self.GetData().CurId = Id 
+end
+
+
