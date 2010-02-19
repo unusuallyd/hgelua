@@ -27,13 +27,16 @@ GameCtrl = {
 }
 
 function GameCtrl:FrameFunc()
+	if self.GetData.IsEnd then
+		return true
+	end
 	local CurSection = self.CurSection
 	return CurSection.FrameFunc()
 end
 
 function GameCtrl:RenderFunc()
 	local CurSection = self.CurSection
-	return CurSection.RenderFunc()
+	CurSection.RenderFunc()
 end
 
 function GameCtrl:Init()
@@ -51,6 +54,7 @@ function GameCtrl:AddSection(Id, Section)
 end
 
 function GameCtrl:Start(Id)
+	self:InitSection(Id)
 	self:GotoSection(Id)
 	
 	hge.System_MainLoop()
@@ -60,12 +64,18 @@ function GameCtrl:End()
 	self.GetData().IsEnd = true
 end
 
-function GameCtrl:InitSection()
-	local CurSection = self.CurSection
+function GameCtrl:InitSection(Id)
+	local CurSection
+	if not Id then
+		CurSection = self.CurSection
+	else
+		CurSection = 
+	end
 	CurSection.InitFunc()
 end
 
-function GameCtrl:EndSection()
+function GameCtrl:EndSection(Id)
+	...
 	CurSection.EndFunc()
 end
 
