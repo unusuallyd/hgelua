@@ -9,6 +9,8 @@
 #include <hgerect.h>
 #include <hgeanim.h>
 #include <hgefont.h>
+#include <hgegui.h>
+#include <hgeguictrls.h>
 #include <lua.hpp>
 #include <windows.h>
 
@@ -31,14 +33,17 @@ extern lua_State * global_L;
 #define RECT "Rect"
 #define ANIMATION "Animation"
 #define FONT "Font"
-
+#define GUI "Gui"
+#define GUIOBJECT "GuiObject"
+#define GUITEXT "GuiText"
+#define GUIBUTTON "GuiButton"
 
 void luaopen_hge(lua_State *L); 
 void luaopen_sprite(lua_State *L);
 void luaopen_rect(lua_State *L);
 void luaopen_animation(lua_State *L);
 void luaopen_font(lua_State *L);
-
+void luaopen_gui(lua_State *L);
 
 int empty_func(lua_State *L);
 void stackDump (lua_State *L);
@@ -48,6 +53,9 @@ int lhge_newsprite(lua_State *L);
 int lhge_newrect(lua_State *L);
 int lhge_newanimation(lua_State *L);
 int lhge_newfont(lua_State *L);
+int lhge_newgui(lua_State *L);
+int lhge_newguitext(lua_State *L);
+int lhge_newguibutton(lua_State *L);
 void create_meta(lua_State *L, const char* metatable, const luaL_Reg lib[]);
 
 struct ConstValue
