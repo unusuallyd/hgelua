@@ -1026,6 +1026,10 @@ static const luaL_Reg syslib[] =
 	{	"NewAnimation", lhge_newanimation},
 	// Font
 	{	"NewFont", lhge_newfont},
+	// GUI
+	{ "NewGUI", lhge_newgui},
+	// GUIText
+	{	"NewGUIText", lhge_newguitext},
 	// NULL
 	{	NULL, NULL	}
 };
@@ -1093,4 +1097,5 @@ void luaopen_hge(lua_State *L)
 	luaopen_rect(L);
 	luaopen_animation(L);
 	luaopen_font(L);
+	luaopen_gui(L);
 }
