@@ -1027,7 +1027,7 @@ static const luaL_Reg syslib[] =
 	// Font
 	{	"NewFont", lhge_newfont},
 	// GUI
-	{ "NewGUI", lhge_newgui},
+	{	"NewGUI", lhge_newgui},
 	// GUIText
 	{	"NewGUIText", lhge_newguitext},
 	// NULL
