@@ -8,6 +8,25 @@
 #define HH2GUIOBJECT(udp) (hgeGUIObject*)(*udp)
 #define HH2GUITEXT(udp) (hgeGUIText*)(*udp)
 
+
+hgeGUIObject* togui(lua_State *L, int index)
+{
+	lua_pushvalue(L, index);	
+	lua_pushstring(L, "__name");
+	lua_gettable(L, -2);
+	const char* metaname = luaL_checkstring(L, -1);
+	lua_pop(L, 2);
+	if (strcmp(metaname, GUITEXT) == 0 )
+	{
+		return (hgeGUIObject*)*toudp(L, index, GUITEXT);
+	}
+	else
+	{
+		luaL_error(L, "Get GUIObject Error");
+		return NULL;
+	}
+}
+
 // GUI Control Manager
 
 int lhge_newgui(lua_State *L)
@@ -38,7 +57,7 @@ static int gui_tostring(lua_State *L)
 static int gui_addctrl(lua_State *L)
 {
 	hgeGUI* gui = HH2GUI(toudp(L, 1, GUI));
-	hgeGUIObject* obj = HH2GUIOBJECT(toudp(L, 2, GUIOBJECT));
+	hgeGUIObject* obj = togui(L, 2);
 	gui->AddCtrl(obj);
 	return 0;
 }
@@ -54,7 +73,22 @@ static int gui_getctrl(lua_State *L)
 {
 	hgeGUI* gui = HH2GUI(toudp(L, 1, GUI));
 	hgeGUIObject* obj = gui->GetCtrl(luaL_checkinteger(L, 2));
-	HHANDLE * udp = newudp(L, GUIOBJECT);
+	
+	// dynamic_cast
+	HHANDLE * udp = NULL;
+
+	obj = dynamic_cast<hgeGUIText* >(obj);
+
+	if (obj == 0)
+	{
+		printf("dynamic_cast guitext failed\n");
+		udp = newudp(L, GUIOBJECT);
+	}
+	else
+	{
+		udp = newudp(L, GUITEXT);
+	}
+
 	*udp = (HHANDLE)obj;
 	return 1;
 }
@@ -175,70 +209,70 @@ static int gui_render(lua_State *L)
 
 static int guiobject_gc(lua_State *L)
 {
-	hgeGUIObject* obj = HH2GUIOBJECT(toudp(L, 1, GUIOBJECT));
+	hgeGUIObject* obj = togui(L, 1);
 	delete obj;
 	return 0;
 }
 
 static int guiobject_render(lua_State *L)
 {
-	hgeGUIObject* obj = HH2GUIOBJECT(toudp(L, 1, GUIOBJECT));
+	hgeGUIObject* obj = togui(L, 1);
 	obj->Render();
 	return 0;
 }
 
 static int guiobject_update(lua_State *L)
 {
-	hgeGUIObject* obj = HH2GUIOBJECT(toudp(L, 1, GUIOBJECT));
+	hgeGUIObject* obj = togui(L, 1);
 	obj->Update(luaL_checknumber(L, 2));
 	return 0;
 }
 
 static int guiobject_enter(lua_State *L)
 {
-	hgeGUIObject* obj = HH2GUIOBJECT(toudp(L, 1, GUIOBJECT));
+	hgeGUIObject* obj = togui(L, 1);
 	obj->Enter();
 	return 0;
 }
 
 static int guiobject_leave(lua_State *L)
 {
-	hgeGUIObject* obj = HH2GUIOBJECT(toudp(L, 1, GUIOBJECT));
+	hgeGUIObject* obj = togui(L, 1);
 	obj->Leave();
 	return 0;
 }
 
 static int guiobject_reset(lua_State *L)
 {
-	hgeGUIObject* obj = HH2GUIOBJECT(toudp(L, 1, GUIOBJECT));
+	hgeGUIObject* obj = togui(L, 1);
 	obj->Reset();
 	return 0;
 }
 
 static int guiobject_isdone(lua_State *L)
 {
-	hgeGUIObject* obj = HH2GUIOBJECT(toudp(L, 1, GUIOBJECT));
+	hgeGUIObject* obj = togui(L, 1);
 	lua_pushboolean(L, obj->IsDone());
 	return 1;
 }
 
 static int guiobject_focus(lua_State *L)
 {
-	hgeGUIObject* obj = HH2GUIOBJECT(toudp(L, 1, GUIOBJECT));
+	hgeGUIObject* obj = togui(L, 1);
 	obj->Focus(lua_toboolean(L, 2));	
 	return 0;
 }
 
 static int guiobject_mouseover(lua_State *L)
 {
-	hgeGUIObject* obj = HH2GUIOBJECT(toudp(L, 1, GUIOBJECT));
+	hgeGUIObject* obj = togui(L, 1);
 	obj->MouseOver(lua_toboolean(L, 2));
 	return 0;
 }
 
 static int guiojbect_mousemove(lua_State *L)
 {
-	hgeGUIObject* obj = HH2GUIOBJECT(toudp(L, 1, GUIOBJECT));
+	hgeGUIObject* obj = togui(L, 1);
 	lua_pushboolean(L, obj->MouseMove(
 				luaL_checknumber(L, 2),
 				luaL_checknumber(L, 3)
@@ -248,28 +282,28 @@ static int guiojbect_mousemove(lua_State *L)
 
 static int guiobject_mouselbutton(lua_State *L)
 {
-	hgeGUIObject* obj = HH2GUIOBJECT(toudp(L, 1, GUIOBJECT));
+	hgeGUIObject* obj = togui(L, 1);
 	lua_pushboolean(L, obj->MouseLButton(lua_toboolean(L, 2)));
 	return 1;
 }
 
 static int guiobject_mouserbutton(lua_State *L)
 {
-	hgeGUIObject* obj = HH2GUIOBJECT(toudp(L, 1, GUIOBJECT));
+	hgeGUIObject* obj = togui(L, 1);
 	lua_pushboolean(L, obj->MouseRButton(lua_toboolean(L, 2)));
 	return 1;
 }
 
 static int guiobject_mousewheel(lua_State *L)
 {
-	hgeGUIObject* obj = HH2GUIOBJECT(toudp(L, 1, GUIOBJECT));
+	hgeGUIObject* obj = togui(L, 1);
 	lua_pushboolean(L, obj->MouseWheel(luaL_checkinteger(L, 2)));
 	return 1;
 }
 
 static int guiobject_keyclick(lua_State *L)
 {
-	hgeGUIObject* obj = HH2GUIOBJECT(toudp(L, 1, GUIOBJECT));
+	hgeGUIObject* obj = togui(L, 1);
 	lua_pushboolean(L, obj->KeyClick(
 				luaL_checkinteger(L, 2),
 				luaL_checkstring(L, 3)[0])
@@ -279,7 +313,7 @@ static int guiobject_keyclick(lua_State *L)
 
 static int guiobject_setcolor(lua_State *L)
 {
-	hgeGUIObject* obj = HH2GUIOBJECT(toudp(L, 1, GUIOBJECT));
+	hgeGUIObject* obj = togui(L, 1);
 	obj->SetColor(luaL_checkinteger(L, 2));
 	return 0;
 }
@@ -296,6 +330,7 @@ int lhge_newguitext(lua_State *L)
 			luaL_checknumber(L, 4),
 			luaL_checknumber(L, 5),
 			fnt);
+
 	HHANDLE* udp = newudp(L, GUITEXT);
 	*udp = (HHANDLE)guitext;
 	return 1;
